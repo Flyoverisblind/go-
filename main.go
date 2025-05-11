@@ -1,20 +1,26 @@
 package main
 
 import (
-	"Boke/controller"
-	"Boke/database"
+	"Boke/router"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"time"
 )
 
 func main() {
-	database.InitMySQL()
 	r := gin.Default()
-	r.POST("/AddArticle", controller.AddArticle)
-	r.GET("/getArticle/:id", controller.GetArticle)
-	r.DELETE("/deleteArticle/:id", controller.DeleteArticle)
-	r.GET("/getArticles", controller.GetArticles)
-	err := r.Run(":8080")
-	if err != nil {
-		return
-	}
+
+	// 启用 CORS
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:5173"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
+	// 注册路由
+	router.RegisterRoutes(r)
+	// 启动服务
+	r.Run(":8080")
 }

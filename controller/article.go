@@ -13,7 +13,6 @@ func AddArticle(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
 	if result := database.DB.Create(&article); result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
 		return
@@ -28,7 +27,6 @@ func GetArticle(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"error": "文章未找到"})
 		return
 	}
-
 	c.JSON(http.StatusOK, gin.H{"article": article})
 }
 func GetArticles(c *gin.Context) {
