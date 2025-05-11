@@ -31,7 +31,15 @@ func GetArticle(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"article": article})
 }
+func GetArticles(c *gin.Context) {
+	var articles []model.Article
+	if err := database.DB.Find(&articles).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"articles": articles})
 
+}
 func DeleteArticle(c *gin.Context) {
 	id := c.Param("id")
 	var article model.Article
