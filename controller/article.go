@@ -70,7 +70,7 @@ func Modification(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"error": "文章未找到"})
 		return
 	}
-	// 拿到修改的数据
+	// 拿到修改的数据并检验
 	var updateData model.Article
 	if err := c.ShouldBindJSON(&updateData); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "请求数据无效"})
