@@ -14,4 +14,5 @@ func RegisterRoutes(r *gin.Engine) {
 	r.DELETE("/deleteArticle/:id", controller.DeleteArticle)
 	r.GET("/getArticles", controller.GetArticles)
 	r.GET("/getArticleByID/:id", controller.GetArticleByID)
+	r.POST("/Modification/:id", controller.Modification)
 }

@@ -55,14 +55,37 @@ func DeleteArticle(c *gin.Context) {
 func GetArticleByID(c *gin.Context) {
 	id := c.Param("id")
 	var article model.Article
-
 	if err := database.DB.First(&article, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "文章未找到"})
 		return
 	}
-
 	// 增加阅读数
 	database.DB.Model(&article).Update("Views", article.Views+1)
-
 	c.JSON(http.StatusOK, gin.H{"article": article})
+}
+func Modification(c *gin.Context) {
+	id := c.Param("id") // 从 URL 中获取参数，如 /article/1
+	var article model.Article
+	if err := database.DB.First(&article, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "文章未找到"})
+		return
+	}
+	// 拿到修改的数据
+	var updateData model.Article
+	if err := c.ShouldBindJSON(&updateData); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "请求数据无效"})
+		return
+	}
+	// 更新文章
+	if err := database.DB.Model(&article).Updates(updateData).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "更新文章失败"})
+		return
+	}
+
+	// 返回更新后的文章
+	c.JSON(http.StatusOK, gin.H{
+		"message": "文章更新成功",
+		"article": article,
+	})
+
 }
