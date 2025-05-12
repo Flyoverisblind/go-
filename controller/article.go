@@ -51,3 +51,18 @@ func DeleteArticle(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "删除成功"})
 }
+
+func GetArticleByID(c *gin.Context) {
+	id := c.Param("id")
+	var article model.Article
+
+	if err := database.DB.First(&article, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "文章未找到"})
+		return
+	}
+
+	// 增加阅读数
+	database.DB.Model(&article).Update("Views", article.Views+1)
+
+	c.JSON(http.StatusOK, gin.H{"article": article})
+}

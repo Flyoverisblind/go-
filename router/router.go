@@ -13,7 +13,5 @@ func RegisterRoutes(r *gin.Engine) {
 	r.GET("/getArticle/:id", controller.GetArticle)
 	r.DELETE("/deleteArticle/:id", controller.DeleteArticle)
 	r.GET("/getArticles", controller.GetArticles)
-	r.GET("/ping", func(c *gin.Context) {
-		c.String(200, "pong")
-	})
+	r.GET("/getArticleByID/:id", controller.GetArticleByID)
 }
